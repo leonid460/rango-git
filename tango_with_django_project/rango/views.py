@@ -10,8 +10,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
+
 #def angel(request):
 #    return render(request, 'index.html', {})
+
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -19,11 +21,13 @@ def index(request):
     context_dict = {'categories': category_list, 'pages': page_list}
     return render(request, 'rango/index.html', context_dict)
 
+
 def about(request):
     context_dict = {'boldmessage': "This is about page"}
     print(request.method)
     print(request.user)
     return render(request, 'rango/about.html', context=context_dict)
+
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -37,6 +41,8 @@ def show_category(request, category_name_slug):
         context_dict['pages'] = None
     return render(request, 'rango/category.html', context_dict)
 
+
+@login_required
 def add_category(request):
     form = CategoryForm()
     # HHTP post?
@@ -53,6 +59,8 @@ def add_category(request):
             print(form.errors)
     return render(request, 'rango/add_category.html', {'form': form})
 
+
+@login_required
 def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -91,7 +99,7 @@ def user_login(request):
                 return HttpResponse("Your Rango account is disabled.")
         else:
             print("Invalid login details: {0}, {1}".format(username,password))
-            return HttpResponse("Invalid login details supplied.")
+            return HttpResponse("Invalid login or password.")
 
     else:
         return render(request, 'rango/login.html', {})
