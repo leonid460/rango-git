@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 #def angel(request):
@@ -16,13 +17,25 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+    # request.session.set_test_cookie()
+
     category_list = Category.objects.order_by('-likes')[:5]
     page_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories': category_list, 'pages': page_list}
-    return render(request, 'rango/index.html', context_dict)
+
+    response = render(request, 'rango/index.html', context_dict)
+
+    visitor_cookie_handler(request, response)
+
+    return response
 
 
 def about(request):
+    # if request.session.test_cookie_worked():
+    #    print("TEST COOKIE WORKED!")
+    #    request.session.delete_test_cookie()
+
+
     context_dict = {'boldmessage': "This is about page"}
     print(request.method)
     print(request.user)
@@ -149,3 +162,18 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+def visitor_cookie_handler(request, response):
+    visits_cookie = int(request.COOKIES.get('visits', '1'))
+    
+    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7],'%Y-%m-%d %H:%M:%S')
+
+    if (datetime.now() - last_visit_time).days > 0:
+        visits_cookie = visits_cookie + 1
+        response.set_cookie('last_visit', str(datetime.now()))
+    else:
+        response.set_cookie('last_visit', last_visit_cookie)
+
+    response.set_cookie('visits', visits_cookie)
