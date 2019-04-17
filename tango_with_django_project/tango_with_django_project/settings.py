@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -84,6 +85,23 @@ DATABASES = {
     }
 }
 
+# Login
+
+# if True, users can register
+REGISTRATION_OPEN = True
+
+# One-week activation window
+ACCOUNT_ACTIVATION_DAYS = 7
+
+# if True, user will be automatically logged in
+REGISTRATION_AUTO_LOGIN = True
+
+# The page I want users to arrive at after thay successful log in
+LOGIN_REDIRECT_URL = '/rango/'
+
+# The page users are directed to if they are not logged in,
+# and are trying to access pages requiring authentication
+LOGIN_URL = '/accounts/login/'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -125,4 +143,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR, ]
 
-LOGIN_URL = '/rango/login/'
+# Sessions
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
