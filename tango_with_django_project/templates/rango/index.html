@@ -7,48 +7,53 @@
 {% endblock %}
 
 {% block body_block %}
-      <h1>Rango says...</h1>
-      <div>
-        {% if user.is_authenticated %}
-          Howdy {{ user.username }}!
-        {% else %}
-          Hey there guest!
-        {% endif %}
-      </div>
+<div class="jumbotron">
+    <h1 class="display-3">Rango says...</h1>
+    {% if user.is_authenticated %}
+      <h1>Hey there {{ user.username }}! </h1>
+    {% else %}
+      <h1>Hey there guest! </h1>>
+    {% endif %}
+</div>
 
-      <h2>Most Liked Categories</h2>
-      <div>
+<div class="row marketing">
+    <div class="col-lg-6">
+        <h4>Most Liked Categories</h4>
+        <p>
         {% if categories %}
-        <ul>
+          <ul class="list-group">
           {% for category in categories %}
-          <li>
-          <a href="{% url 'rango:show_category' category.slug %}">
-            {{ category.name }}</a>
-          </li>
+            <li class="list-group-item">
+              <a href="{% url 'rango:show_category' category.slug %}">
+              {{ category.name }}</a>
+            </li>
           {% endfor %}
-        </ul>
+          </ul>
         {% else %}
           <strong>There are no categories present</strong>
         {% endif %}
-      </div>
-
-      <h2>Most Viewed Pages</h2>
-      <div>
+        </p>>
+    </div>
+      
+    <div class="col-lg-6">
+        <h4>Most Viewed Pages</h4>
+        <p>
         {% if pages %}
-          <ul>
+          <ul class="list-group">
             {% for page in pages %}
-            <li>
+            <li class="list-group-item">
               <a href="{{ page.url }}">{{ page.title }}</a>
             </li>
             {% endfor %}
           </ul>
         {% else %}
-          <storng>There are no pages in present</strong>
+            <storng>There are no pages in present</strong>
         {% endif %}
-      </div>
+        </p>
+    </div>
+</div>
 
-      <div>
-          <img src="{% static "images/rango.jpg" %}"
-               alt="Picture of Rango" />
-      </div>
+<div>
+    <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" />
+</div>
 {% endblock %}
