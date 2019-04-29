@@ -1,7 +1,6 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
 
-
 {% block title_block %}
       Index
 {% endblock %}
@@ -12,7 +11,7 @@
     {% if user.is_authenticated %}
       <h1>Hey there {{ user.username }}! </h1>
     {% else %}
-      <h1>Hey there guest! </h1>>
+      <h1>Hey there guest! </h1>
     {% endif %}
 </div>
 

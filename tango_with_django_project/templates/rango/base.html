@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <title>Rango - 
-      {% block title %}
+      {% block title_block %}
         How to Tango with Django!
       {% endblock %}
     </title>
@@ -51,10 +51,10 @@
           </li>
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'auth_login' %}">Sign In</a>
+            <a class="nav-link" href="{% url 'auth_login' %}">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'registration_register' %}">Sign Up</a>
+            <a class="nav-link" href="{% url 'registration_register' %}">Register Here</a>
           </li>
           {% endif %}
         </ul><!-- 
