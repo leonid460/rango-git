@@ -126,3 +126,18 @@ def visitor_cookie_handler(request):
         request.session['last_visit'] = last_visit_cookie
 
     request.session['visits'] = visits
+
+
+def track_url(request):
+    if request.method == 'GET':
+        print('1')
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            page = Page.objects.get(id=page_id)
+            page.views+= 1
+            page.save()
+            print('2')
+
+            return HttpResponseRedirect(page.url)
+        else:
+            return HttpResponseRedirect(reverse('index'))
