@@ -1,0 +1,30 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Profile
+{% endblock %}
+
+{% block body_block %}
+    <h1>{{selecteduser.username}} Profile</h1>
+    {% if user_profile.picture %}
+    <img 
+        src="/{{user_profile.picture}}" 
+        height="300" 
+        alt="{{user.username}}">
+    {% endif %}
+    <br />
+
+    {% if user.username == selecteduser.username %}
+    <form id="profile_form" method="post" 
+        action="{% url 'rango:profile' user.username %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" name="submit" value="Save Profile">
+    </form>
+    {% else %}
+        <p><strong>Username: </strong>{{selecteduser.username}}</p>
+        <p><strong>E-mail: </strong>{{selecteduser.email}}</p>
+        <p><strong>Website: </strong>{{user_profile.website}}</p>
+    {% endif %}
+{% endblock %}

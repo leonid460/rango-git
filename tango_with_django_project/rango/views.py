@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from rango.models import Category
 from rango.models import Page
+from rango.models import UserProfile
 from rango.forms import CategoryForm
 from rango.forms import PageForm
 from rango.forms import UserForm, UserProfileForm
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -47,7 +49,7 @@ def show_category(request, category_name_slug):
     context_dict = {}
     try:
         category = Category.objects.get(slug=category_name_slug)
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
         context_dict['pages'] = pages
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -129,15 +131,73 @@ def visitor_cookie_handler(request):
 
 
 def track_url(request):
+    url = '/rango/'
+
     if request.method == 'GET':
-        print('1')
         if 'page_id' in request.GET:
             page_id = request.GET['page_id']
+            
             page = Page.objects.get(id=page_id)
             page.views+= 1
+            url = page.url
             page.save()
-            print('2')
 
-            return HttpResponseRedirect(page.url)
+    return redirect(url)
+
+
+@login_required
+def register_profile(request):
+    #user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+    form = UserProfileForm()
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)#, instance = user_profile)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
+            return redirect('index')
         else:
-            return HttpResponseRedirect(reverse('index'))
+            print(form.errors)
+    
+    context_dict = {'form': form}
+
+    return render(request, 'registration/profile_registration.html', context_dict)
+    
+
+@login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except user.DoesNotExist:
+        redirect('index')
+
+    user_profile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm({
+        'website': user_profile.website, 
+        'picture': user_profile.picture
+    })
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance = user_profile)
+        if form.is_valid():
+            form.save(commit=True)
+        else:
+            print(form.errors)
+    
+    context_dict = {
+        'form': form, 
+        'user_profile': user_profile, 
+        'selecteduser': user
+    }
+
+    return render(request, 'registration/profile.html', context_dict)
+
+
+@login_required
+def profiles_list(request):
+    profiles = UserProfile.objects.order_by()
+
+    context_dict = {'profiles': profiles}
+
+    return render(request, 'registration/profiles_list.html', context_dict)

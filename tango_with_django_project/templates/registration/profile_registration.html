@@ -1,0 +1,17 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edt Profile
+{% endblock %}
+
+{% block body_block %}
+    <h1>Create Profile</h1>
+
+    <form id="profile_form" method="post" 
+        action="{% url 'rango:add_profile' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" name="submit" value="Save Profile">
+    </form>
+{% endblock %}
