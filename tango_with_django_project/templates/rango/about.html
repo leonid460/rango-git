@@ -7,15 +7,23 @@
 
 {% block body_block %}
     <h1><strong>{{ boldmessage }}</strong></h1><br />
-    <p>This tutorial has been put together by the most
-      stupit thing in the whole Universe!</p>
+    
+    <div>This tutorial has been put together by the most
+      stupit thing in the whole Universe!
+    </div>
+    
     <div>
         <img src="{% static "images/cirno.png" %}"
              alt="Cirno is The Smartest"
              /><br />
     </div>
+    
     <div>
         <p> visits: {{ visits }}</p>
     </div>
+
+    <button id="about-btn">Click Me - I run Javascript on Speed</button>
+        <p id="msg">This is an exemple</p>
+        <p>This is another example</p>
 {% endblock %}
 

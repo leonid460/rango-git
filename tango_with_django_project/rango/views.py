@@ -9,7 +9,7 @@ from rango.forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
@@ -196,8 +196,9 @@ def profile(request, username):
 
 @login_required
 def profiles_list(request):
-    profiles = UserProfile.objects.order_by()
+    profiles = UserProfile.objects.all()
 
     context_dict = {'profiles': profiles}
 
     return render(request, 'registration/profiles_list.html', context_dict)
+

@@ -21,7 +21,8 @@ class Category(models.Model):
 
 
 class Page(models.Model):
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category,
+            on_delete=models.PROTECT)
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
@@ -29,7 +30,8 @@ class Page(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User,
+            on_delete=models.PROTECT)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='static/profile_images/', blank=True)
 
